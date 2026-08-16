@@ -1,90 +1,13 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import type { Easing } from 'framer-motion';
 import { motion } from 'framer-motion';
 import SectionHeading from '@/components/shared/SectionHeading';
-import { gsap } from '@/lib/scrollTriggers';
 import { fadeInUp, staggerContainer, sustainEase } from '@/lib/motionVariants';
 
-const GRID_SIZE = 10;
 
-function HeatmapCell({
-  row,
-  col,
-  delay,
-}: {
-  row: number;
-  col: number;
-  delay: number;
-}) {
-  const cellRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <div
-      ref={cellRef}
-      className="heatmap-cell rounded-lg aspect-square transition-colors duration-700"
-      data-row={row}
-      data-col={col}
-      style={{
-        backgroundColor: '#FBBF24',
-        transitionDelay: `${delay}ms`,
-      }}
-    />
-  );
-}
 
 export default function CarbonIntelligence() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!gridRef.current) return;
-
-    const cells = gridRef.current.querySelectorAll('.heatmap-cell');
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: gridRef.current,
-          start: 'top 75%',
-          end: 'bottom 25%',
-          scrub: 1,
-        },
-      });
-
-      cells.forEach((cell) => {
-        const row = parseInt(cell.getAttribute('data-row') || '0');
-        const col = parseInt(cell.getAttribute('data-col') || '0');
-        const centerDist = Math.sqrt(Math.pow(row - GRID_SIZE / 2, 2) + Math.pow(col - GRID_SIZE / 2, 2));
-        const normalizedDist = centerDist / (GRID_SIZE * 0.7);
-
-        tl.to(
-          cell,
-          {
-            backgroundColor: '#22C55E',
-            duration: 0.3,
-          },
-          normalizedDist * 0.5
-        );
-      });
-    }, gridRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const gridCells = [];
-  for (let row = 0; row < GRID_SIZE; row++) {
-    for (let col = 0; col < GRID_SIZE; col++) {
-      const centerDist = Math.sqrt(Math.pow(row - GRID_SIZE / 2, 2) + Math.pow(col - GRID_SIZE / 2, 2));
-      gridCells.push(
-        <HeatmapCell
-          key={`${row}-${col}`}
-          row={row}
-          col={col}
-          delay={centerDist * 50}
-        />
-      );
-    }
-  }
 
   return (
     <section ref={sectionRef} className="py-32 px-6 md:px-20 max-w-7xl mx-auto" id="carbon">
@@ -94,18 +17,27 @@ export default function CarbonIntelligence() {
         subtitle="Scroll to see how SustainAI models carbon reduction across every ward — from today's baseline to tomorrow's optimized city."
       />
 
-      <div className="grid md:grid-cols-2 gap-16 items-center">
-        {/* Heatmap Grid */}
+      <div className="grid md:grid-cols-2 gap-16 items-center mt-10">
+        {/* City Video */}
         <motion.div
-          ref={gridRef}
-          className="grid gap-1.5 max-w-[400px] mx-auto"
-          style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)` }}
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white scale-110"
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: sustainEase as Easing }}
           viewport={{ once: true }}
         >
-          {gridCells}
+          <div className="absolute inset-0 bg-black">
+            <video 
+              src="/city-video.mp4" 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full h-full object-cover scale-[1.35] origin-center"
+            />
+          </div>
+          {/* Subtle inner shadow for depth */}
+          <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] pointer-events-none rounded-2xl" />
         </motion.div>
 
         {/* Tree Growth + Caption */}

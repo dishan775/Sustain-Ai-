@@ -6,7 +6,7 @@ import {
   AlertTriangle, Lightbulb, Settings2,
 } from 'lucide-react';
 import SectionHeading from '@/components/shared/SectionHeading';
-import GlassCard from '@/components/shared/GlassCard';
+
 import { staggerContainer, fadeInUp, sustainEase } from '@/lib/motionVariants';
 
 const modules = [
@@ -82,7 +82,7 @@ export default function AIIntelligenceGrid() {
       />
 
       <motion.div
-        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
+        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10"
         variants={staggerContainer(0.06)}
         initial="hidden"
         whileInView="visible"
@@ -93,56 +93,61 @@ export default function AIIntelligenceGrid() {
           const isExpanded = expandedIdx === idx;
 
           return (
-            <motion.div key={mod.title} variants={fadeInUp}>
-              <GlassCard
-                className="p-6 transition-all duration-300"
-                hover
-                onClick={() => handleToggle(idx)}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-sustain-mint flex items-center justify-center flex-shrink-0">
-                    <Icon size={20} className="text-sustain-emerald" strokeWidth={1.8} />
+            <motion.div 
+              key={mod.title} 
+              variants={fadeInUp} 
+              className="ai-card-parent h-full"
+              onMouseEnter={() => setExpandedIdx(idx)}
+              onMouseLeave={() => setExpandedIdx(null)}
+            >
+              <div className="ai-card h-full">
+                <div className="ai-content-box h-[calc(100%-30px)] flex flex-col justify-start">
+                  <div className="ai-card-title flex-wrap gap-2">
+                    <div className="w-10 h-10 rounded-xl bg-[rgba(34,197,94,0.15)] flex items-center justify-center flex-shrink-0">
+                      <Icon size={20} className="text-[#166534]" strokeWidth={2} />
+                    </div>
+                    <span>{mod.title}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-sustain-ink">{mod.title}</h3>
-                    <p className="text-sm text-sustain-muted mt-1 leading-relaxed">{mod.desc}</p>
-                  </div>
-                </div>
 
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: sustainEase as Easing }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-4 pt-4 border-t border-sustain-ink/5">
-                        {/* Micro-visual: animated SVG */}
-                        <div className="mb-3 flex justify-center">
-                          <svg viewBox="0 0 120 30" className="w-24 h-8">
-                            {[0, 1, 2, 3, 4].map((i) => (
-                              <motion.rect
-                                key={i}
-                                x={i * 24 + 2}
-                                y={30}
-                                width={18}
-                                height={0}
-                                rx={3}
-                                fill={i % 2 === 0 ? '#22C55E' : '#3B82F6'}
-                                animate={{ height: [0, 10 + i * 4, 8 + i * 3], y: [30, 20 - i * 4, 22 - i * 3] }}
-                                transition={{ duration: 1.2, delay: i * 0.1, repeat: Infinity, repeatType: 'reverse' }}
-                              />
-                            ))}
-                          </svg>
+                  <div className="ai-card-content">
+                    {mod.desc}
+                  </div>
+
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: sustainEase as Easing }}
+                        className="overflow-hidden w-full mt-auto"
+                      >
+                        <div className="ai-card-detail">
+                          {/* Micro-visual: animated SVG */}
+                          <div className="mb-3 flex justify-center">
+                            <svg viewBox="0 0 120 30" className="w-24 h-8">
+                              {[0, 1, 2, 3, 4].map((i) => (
+                                <motion.rect
+                                  key={i}
+                                  x={i * 24 + 2}
+                                  y={30}
+                                  width={18}
+                                  height={0}
+                                  rx={3}
+                                  fill={i % 2 === 0 ? '#22C55E' : '#166534'}
+                                  animate={{ height: [0, 10 + i * 4, 8 + i * 3], y: [30, 20 - i * 4, 22 - i * 3] }}
+                                  transition={{ duration: 1.2, delay: i * 0.1, repeat: Infinity, repeatType: 'reverse' }}
+                                />
+                              ))}
+                            </svg>
+                          </div>
+                          <p>{mod.detail}</p>
                         </div>
-                        <p className="text-sm text-sustain-muted leading-relaxed">{mod.detail}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </GlassCard>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
             </motion.div>
           );
         })}
