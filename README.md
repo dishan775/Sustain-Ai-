@@ -1,6 +1,5 @@
 # SustainAI - Living Digital Twin for Sustainable Cities
 
-![SustainAI Concept](https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2070&auto=format&fit=crop)
 
 SustainAI is a cutting-edge web application that provides a living digital twin for sustainable cities. It fuses computer vision, predictive forecasting, and reinforcement learning to help city administrators monitor, predict, and act on urban infrastructure data in real time.
 
@@ -87,11 +86,7 @@ src/
 
 This project uses Supabase for authentication. To enable full functionality:
 
-1.  Go to your Supabase project dashboard.
-2.  Enable **Google** under Authentication > Providers.
-3.  Add your Google Client ID and Secret.
-4.  In Authentication > URL Configuration, add your local development URL (`http://localhost:5173/auth/callback`) and production URL to the **Redirect URLs**.
-5.  *(Optional)* Create an `avatars` bucket in Supabase Storage to enable profile picture uploads.
+
 
 ## 🤝 Contributing
 
